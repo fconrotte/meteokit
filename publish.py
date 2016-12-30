@@ -42,4 +42,14 @@ print(api.me().name)
 # If the application settings are set for "Read and Write" then
 # this line should tweet out the message to your account's
 # timeline. The "Read and Write" setting is on https://dev.twitter.com/apps
-api.update_status(status='leo est un super lanceur de fusees!')
+
+root_path='/home/pi/station_meteo/'
+deltatobepublished_path=root_path + 'data/deltatobepublished.csv'
+
+lines=""
+with open(deltatobepublished_path) as f:
+   for line in f:
+      lines+=line
+f.close()
+
+api.update_status(status=lines)

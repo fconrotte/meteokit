@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os,sys
-sys.path.append(os.path.join("../Yocto/Sources"))
+sys.path.append(os.path.join("/home/pi/station_meteo/Yocto/Sources"))
 from yocto_api import *
 from yocto_humidity import *
 from yocto_temperature import *
@@ -21,8 +21,10 @@ def die(msg):
 
 errmsg=YRefParam()
 
-target="METEOMK1"
-database_path="../data/database.csv"
+root_path='/home/pi/station_meteo/'
+target='METEOMK1'
+database_path=root_path + 'data/database.csv'
+deltatobepublished_path=root_path + 'data/deltatobepublished.csv'
 
 # Setup the API to use local USB devices
 if YAPI.RegisterHub("usb", errmsg)!= YAPI.SUCCESS:
@@ -37,11 +39,18 @@ pressSensor = YPressure.FindPressure(target+'.pressure')
 tempSensor = YTemperature.FindTemperature(target+'.temperature')
 
 
-f = open(database_path,'a')
 
 now = datetime.strftime(datetime.now(),"%d/%m/%y %H:%M:%S")
 
 line = now + ",%2.1f" % tempSensor.get_currentValue() + ",%4.0f" % pressSensor.get_currentValue() + ",%2.0f" % humSensor.get_currentValue() + "\n"
 
+print line
+
+f = open(database_path,'a')
 f.write(line)
+f.close()
+
+formatted_line = now + "\ntemperature=%2.1f" % tempSensor.get_currentValue() + "°C\npressure=%4.0f" % pressSensor.get_currentValue() + "mb\nhumidity=%2.0f" % humSensor.get_currentValue() + "%"
+f = open(deltatobepublished_path,'w')
+f.write(formatted_line)
 f.close()
