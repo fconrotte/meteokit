@@ -1,0 +1,5 @@
+#!/bin/sh
+cd /home/pi/station_meteo/code/
+./getMeteo.py
+gsync --progress -r -v ~/station_meteo/data/ drive://data/
+./publish.py
