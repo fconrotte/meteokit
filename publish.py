@@ -3,32 +3,13 @@
 from __future__ import absolute_import, print_function
 import os,sys
 import tweepy
+import config
 
-def usage():
-    scriptname = os.path.basename(sys.argv[0])
-    print("Usage:")
-    print(scriptname + ' <consumer_key> <consumer_secret> <access_token> <access_token_secret>')
-    sys.exit()
+def publishline(line):
+   formatted_line = now + "\ntemperature=%2.1f" % tempSensor.get_currentValue() + "°C\npressure=%4.0f" % pressSensor.get_currentValue() + "mb\nhumidity=%2.0f" % humSensor.get_currentValue() + "%"
+   api.update_status(status=lines)
 
 
-if len(sys.argv) < 4:
-    usage()
-
-# == OAuth Authentication ==
-#
-# This mode of authentication is the new preferred way
-# of authenticating with Twitter.
-
-# The consumer keys can be found on your application's Details
-# page located at https://dev.twitter.com/apps (under "OAuth settings")
-consumer_key=sys.argv[1]
-consumer_secret=sys.argv[2]
-
-# The access tokens can be found on your applications's Details
-# page located at https://dev.twitter.com/apps (located
-# under "Your access token")
-access_token=sys.argv[3]
-access_token_secret=sys.argv[4]
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -49,7 +30,5 @@ deltatobepublished_path=root_path + 'data/deltatobepublished.csv'
 lines=""
 with open(deltatobepublished_path) as f:
    for line in f:
-      lines+=line
+      publishline(line)
 f.close()
-
-api.update_status(status=lines)
