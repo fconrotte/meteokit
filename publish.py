@@ -30,4 +30,4 @@ with open(deltatobepublished_path, 'r') as csvfile:
 csvfile.close()
 
 # Empty the file
-open(deltatobepublished_path, 'w').close()
+os.remove(deltatobepublished_path)
