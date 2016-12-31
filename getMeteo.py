@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os,sys,csv,collections
-sys.path.append(os.path.join("/home/pi/station_meteo/Yocto/Sources"))
+sys.path.append(os.path.join("/home/pi/meteokit/Yocto/Sources"))
 from yocto_api import *
 from yocto_humidity import *
 from yocto_temperature import *
@@ -21,7 +21,7 @@ def die(msg):
 
 errmsg=YRefParam()
 
-root_path='/home/pi/station_meteo/'
+root_path='/home/pi/meteokit/'
 target='METEOMK1'
 database_path=root_path + 'data/database.csv'
 deltatobepublished_path=root_path + 'data/deltatobepublished.csv'
@@ -45,14 +45,18 @@ row['datetime']=datetime
 row['temperature']=temperature
 row['pressure']=pressure
 row['humidity']=humidity
+print row
 
+file_exists = os.path.isfile(database_path)
 with open(database_path, 'a') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    writer.writeheader()
-    print row
+    if not file_exists:
+        writer.writeheader()
     writer.writerow(row)
 
+file_exists = os.path.isfile(deltatobepublished_path)
 with open(deltatobepublished_path, 'a') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    writer.writeheader()
+    if not file_exists:
+        writer.writeheader()
     writer.writerow(row)
