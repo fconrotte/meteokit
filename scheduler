@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-cd /home/pi/meteokit/code/
-./getMeteo.py
-gsync --progress -r -v ~/meteokit/data/ drive://data/
-./publish.py
+/home/pi/meteokit/code/getMeteo.py
+/usr/local/bin/gsync --progress -r -v ~/meteokit/data/ drive://data/
+/home/pi/meteokit/code/publish.py
